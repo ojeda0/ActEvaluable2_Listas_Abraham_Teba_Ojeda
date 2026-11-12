@@ -83,12 +83,11 @@ do {
         case "F":
             const nuevoLength = parseInt(window.prompt("Introduce el número de notas que quieres agregar:"));
             notas.length = 0;
-            notas.length = nuevoLength;
 
             for(let i=0; i < notas.length; i++) {
                 
                 const nota = introducirNota();
-                notas[i] = nota;
+                notas.push(nota);
                 console.log(`Nota ${nota} introducida en la posición ${i}.`);
 
             }
