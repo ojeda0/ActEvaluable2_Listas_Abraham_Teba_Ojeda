@@ -26,6 +26,7 @@ function ej1() {
         switch (respuesta) {
             
             case "A":
+
                 const notaPrincipio = introducirNota("Introduce una nota para colocarla al principio:");
                 notas.unshift(notaPrincipio);
                 console.log(`La nota ${notaPrincipio} se ha introducido al principio.`);
@@ -33,6 +34,7 @@ function ej1() {
                 break;
 
             case "B":
+
                 const notaFinal = introducirNota("Introduce una nota para colocarla al final:");
                 notas.push(notaFinal);
                 console.log(`La nota ${notaFinal} se ha introducido al final.`);
@@ -40,6 +42,7 @@ function ej1() {
                 break;
 
             case "C":
+
                 const puntosSubir = introducirPuntos();
 
                 for(let i=0; i<notas.length; i++) {
@@ -60,12 +63,13 @@ function ej1() {
                 break;
 
             case "D":
+
                 if(notas.length == 0) {
 
                     console.log("La lista está vacía y no se pueden calcular las estadísticas.");
 
                 }else {
-                    //Falta la moda
+            
                     console.log(`Estadísticas actuales:\n` +
                         `Moda: ${moda(notas)}\n` +
                         `Máximo: ${maximo(notas)}\n` +
@@ -78,12 +82,14 @@ function ej1() {
                 break;
 
             case "E":
+
                 notas.length = 0;
                 console.log("Se ha vaciado el listado de notas.");
                 console.table(notas);
                 break;
 
             case "F":
+
                 const nuevoLength = parseInt(window.prompt("Introduce el número de notas que quieres agregar:"));
                 notas.length = 0;
 
@@ -213,8 +219,9 @@ function ej1() {
         }
 
     } while (!salir);
+
 }
-ej1();
+//ej1();
 
 //FUNCIONES EJ1
 function introducirNota(mensaje) {
@@ -364,6 +371,309 @@ function introducirPosicion(length) {
 
 //EJ 2
 function ej2() {
-    
+
+    const participantes = new Set();
+
+    let salir = false;
+
+    do {
+
+        const respuesta = window.prompt("Elija una opción:\n" +
+            "A. Inscribir un participante.\n" +
+            "B. Dar de baja un participante.\n" +
+            "C. Comprobar inscripción.\n" +
+            "D. Mostrar participantes.\n" +
+            "E. Vaciar inscripciones.\n" +
+            "F. Salir.\n"
+        ).toUpperCase();
+
+        switch (respuesta) {
+            
+            case "A":
+
+                const nombreInscribir = solicitarNombre("Introduce el nombre de un participante para inscribirlo:");
+
+                if(participantes.has(nombreInscribir)) {
+
+                    console.log(`El participante ${nombreInscribir} ya se encuentra en la lista.`);
+
+                }else {
+
+                    participantes.add(nombreInscribir);
+                    console.log(`El participante ${nombreInscribir} ha sido inscrito.`);
+                    console.table(participantes);
+
+                }
+
+                break;
+
+            case "B":
+
+                const nombreBaja = solicitarNombre("Introduce el nombre de un participante para darlo de baja:");
+
+                if(participantes.has(nombreBaja)) {
+
+                    participantes.delete(nombreBaja);
+                    console.log(`El participante ${nombreBaja} ha sido dado de baja.`);
+                    console.table(participantes);
+
+                }else {
+
+                    console.log(`El participante ${nombreBaja} no se encuentra en la lista.`);
+
+                }
+
+                break;
+
+            case "C":
+
+                const nombreComprobar = solicitarNombre("Introduce el nombre de un participante para comprobar su inscripción:");
+
+                if(participantes.has(nombreComprobar)) {
+
+                    console.log(`El participante ${nombreComprobar} está inscrito.`);
+
+                }else {
+
+                    console.log(`El participante ${nombreComprobar} no está inscrito.`);
+
+                }
+
+                break;
+
+            case "D":
+
+                let contador = 0;
+
+                console.log("------------------------------------------------");
+
+                for(const participante of participantes) {
+
+                    console.log(`Participante en la posición ${contador}: ${participante}`);
+                    console.log("------------------------------------------------");
+                    contador++;
+
+                }
+
+                console.log(`Participantes totales: ${contador}`);
+                console.table(participantes);
+
+                break;
+
+            case "E":
+
+                for(const participante of participantes) {
+
+                    participantes.delete(participante);
+
+                }
+
+                console.log("Se han vaciado todas las inscripciones.");
+
+                break;
+
+            case "F":
+
+                salir = true;
+                console.log("¡Gracias por usar nuestro programa!");
+                break;
+
+        }
+
+    } while (!salir);
+
 }
 //ej2();
+
+//FUNCIONES EJ2
+function solicitarNombre(mensaje) {
+
+    let nombre;
+
+    do {
+
+        nombre = window.prompt(mensaje);
+
+        if(!isNaN(nombre)) {
+
+            console.log("Debes introducir un nombre válido.");
+
+        }
+
+    }while(!isNaN(nombre));
+
+    return nombre.toLowerCase();
+
+}
+
+
+//EJ 3
+function ej3() {
+
+    const libros = new Map();
+
+    let salir = false;
+
+    do {
+
+        const respuesta = window.prompt("Elija una opción:\n" +
+            "A. Añadir un libro.\n" +
+            "B. Eliminar un libro.\n" +
+            "C. Consultar un libro.\n" +
+            "D. Mostrar catálogo.\n" +
+            "E. Modificar ejemplares.\n" +
+            "F. Buscar libros de un autor.\n" +
+            "G. Prestar un libro.\n" +
+            "H. Devolver un libro.\n" +
+            "I. Mostrar estadísticas.\n" +
+            "J. Vaciar catálogo.\n" +
+            "K. Salir.\n"
+        ).toUpperCase();
+
+        switch (respuesta) {
+            
+            case "A":
+
+                const anyadirISBN = solicitarISBN("Introduce el ISBN del libro que quieres añadir:");
+
+                if(libros.has(anyadirISBN)) {
+
+                console.log(`Ya existe un libro con el ISBN ${anyadirISBN}.`);
+
+                }else {
+
+                    const anyadirTitulo = solicitarTexto("Introduce el título del libro que quieres añadir:", "Debes introducir un título válido.");
+                    const anyadirAutor = solicitarTexto("Introduce el autor del libro que quieres añadir:", "Debes introducir un autor válido.");
+                    const anyadirEjemplares = parseInt(solicitarNumero("Introduce el número de ejemplares del libro que quieres añadir:"));
+
+                    const libro = {
+
+                        titulo: anyadirTitulo,
+                        autor: anyadirAutor,
+                        ejemplares: anyadirEjemplares
+
+                    };
+
+                    libros.set(anyadirISBN, libro);
+                    console.log(`El libro ${anyadirTitulo} ha sido añadido al catálogo.`);
+                    console.table(libros);
+
+                }
+
+                break;
+
+            case "B":
+
+                const eliminarISBN = solicitarISBN("Introduce el ISBN del libro que quieres eliminar:");
+
+                if(libros.has(eliminarISBN)) {
+
+                    libros.delete(eliminarISBN);
+                    console.log(`El libro con ISBN ${eliminarISBN} ha sido eliminado al catálogo.`);
+                    console.table(libros);
+
+                }else {
+
+                    console.log(`El libro con ISBN ${eliminarISBN} no está en el catálogo.`);
+
+                }
+
+                break;
+
+            case "C":
+                break;
+
+            case "D":
+                break;
+
+            case "E":
+                break;
+
+            case "F":
+                break;
+
+            case "G":
+                break;
+
+            case "H":
+                break;
+
+            case "I":
+                break;
+
+            case "J":
+                break;
+
+            case "K":
+
+                salir = true;
+                console.log("¡Gracias por usar nuestro programa!");
+                break;
+            
+        }
+
+    } while (!salir);
+
+}
+ej3();
+
+//FUNCIONES EJ3
+function solicitarISBN(mensaje) {
+
+    let codigoISBN;
+
+    do {
+
+        codigoISBN = window.prompt(mensaje);
+
+        if(codigoISBN == "") {
+
+            console.log("Debes introducir un ISBN válido.");
+
+        }
+
+    }while(codigoISBN == "");
+
+    return codigoISBN;
+
+}
+
+function solicitarTexto(mensaje, excepcion) {
+
+    let titulo;
+
+    do {
+
+        titulo = window.prompt(mensaje);
+
+        if(titulo == "" || !isNaN(titulo)) {
+
+            console.log(excepcion);
+
+        }
+
+    }while(titulo == "" || !isNaN(titulo));
+
+    return titulo.toLowerCase();
+
+}
+
+function solicitarNumero(mensaje) {
+
+    let numero;
+
+    do {
+
+        numero = window.prompt(mensaje);
+
+        if(isNaN(numero) || numero == "") {
+
+            console.log("Debes introducir un número válido.");
+
+        }
+
+    }while(isNaN(numero) || numero == "");
+
+    return numero;
+
+}
