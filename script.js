@@ -273,24 +273,33 @@ function introducirPuntos() {
 
 function moda(array) {
     
-    let moda = array[0];
-    let maximoRepeticiones = 0;
+    let moda;
 
-    for(const numero of array) {
+    const mapa = new Map();
 
-        let repeticiones = 0;
+    for(const n of array) {
 
-        for(const numeroDos of array) {
+        if(mapa.has(n)) {
 
-            if(numero == numeroDos) {
-                repeticiones++;
-            }
+            mapa.set(n, mapa.get(n) + 1);
+
+        }else {
+
+            mapa.set(n, 1);
 
         }
 
-        if(repeticiones > maximoRepeticiones) {
-            maximoRepeticiones = repeticiones;
-            moda = numero;
+    }
+
+    let maxRepeticiones = 0;
+
+    for(const n of mapa.keys()) {
+
+        if(maxRepeticiones < mapa.get(n)) {
+
+            maxRepeticiones = mapa.get(n);
+            moda = n;
+
         }
 
     }
@@ -510,7 +519,7 @@ function solicitarNombre(mensaje) {
 //EJ 3
 function ej3() {
 
-    const libros = new Map();
+    let libros = new Map();
 
     let salir = false;
 
@@ -538,7 +547,7 @@ function ej3() {
 
                 if(libros.has(anyadirISBN)) {
 
-                console.log(`Ya existe un libro con el ISBN ${anyadirISBN}.`);
+                    console.log(`Ya existe un libro con el ISBN ${anyadirISBN}.`);
 
                 }else {
 
@@ -581,27 +590,122 @@ function ej3() {
                 break;
 
             case "C":
+                const consultarISBN = solicitarISBN("Introduce el ISBN del libro que quieres consultar:");
+
+                if(!libros.has(consultarISBN)) {
+
+                    console.log(`No existe el libro con ISBN ${consultarISBN}.`);
+
+                }else {
+
+                    console.log(libros.get(consultarISBN));
+
+                }
+
                 break;
 
             case "D":
+
+                let total = 0;
+
+                console.log("-------------------------------------");
+
+                for(const ISBN of libros.keys()) {
+
+                    console.log(libros.get(ISBN));
+                    console.log("-------------------------------------");
+                    total++;
+
+                }
+
+                console.log(`Total de libros en el catálogo: ${total}`);
+
                 break;
 
             case "E":
+                const modificarISBN = solicitarISBN("Introduce el ISBN del libro que quieres modificar:");
+
+                if(!libros.has(modificarISBN)) {
+
+                    console.log(`No existe el libro con ISBN ${modificarISBN}.`);
+
+                }else {
+
+                    const cantidad = parseInt(solicitarNumero("Introduce la cantidad del libro que quieres modificar:"));
+
+                    libros.get(modificarISBN).ejemplares = cantidad;
+                    console.log(`El libro ${libros.get(modificarISBN).titulo} ahora tiene ${cantidad} ejemplares.`);
+                    console.log(libros.get(modificarISBN));
+
+                }
+                
                 break;
 
             case "F":
+
+                const nombreAutor = solicitarTexto("Introduce el nombre del autor para buscar sus libros:", "Debes introducir un autor válido.");
+
+                console.log("-------------------------------------");
+
+                for(const libro of libros.keys()) {
+
+                    if(libros.get(libro).autor == nombreAutor) {
+
+                        console.log(libros.get(libro));
+                        console.log("-------------------------------------");
+
+                    }
+
+                }
+
                 break;
 
             case "G":
+
+                const prestarISBN = solicitarISBN("Introduce el ISBN del libro que quieres prestar:");
+
+                if(!libros.has(prestarISBN)) {
+
+                    console.log(`No existe el libro con ISBN ${prestarISBN}.`);
+
+                }else if(libros.get(prestarISBN).ejemplares > 0) {
+
+                    libros.get(prestarISBN).ejemplares -= 1;
+                    console.log(`Se ha prestado 1 ejemplar del libro ${libros.get(prestarISBN).titulo}.`);
+
+                }else {
+
+                    console.log("No quedan ejemplares disponibles del libro.");
+
+                }
+
                 break;
 
             case "H":
+
+                const devolverISBN = solicitarISBN("Introduce el ISBN del libro que quieres devolver:");
+
+                if(!libros.has(devolverISBN)) {
+
+                    console.log(`No existe el libro con ISBN ${devolverISBN}.`);
+
+                }else {
+
+                    libros.get(devolverISBN).ejemplares += 1;
+                    console.log(`Se ha devuelto 1 ejemplar del libro ${libros.get(devolverISBN).titulo}.`);
+
+                }
+
                 break;
 
             case "I":
+                mostrarEstadisticas(libros);
+
                 break;
 
             case "J":
+                libros = new Map();
+                console.log("Se ha vaciado el catálogo de libros.");
                 break;
 
             case "K":
@@ -675,5 +779,44 @@ function solicitarNumero(mensaje) {
     }while(isNaN(numero) || numero == "");
 
     return numero;
+
+}
+
+function mostrarEstadisticas(mapa) {
+
+    let totalLibros = 0;
+    let totalEjemplares = 0;
+
+    for(const l of mapa.keys()) {
+
+        totalLibros++;
+        totalEjemplares += mapa.get(l).ejemplares;
+
+    }
+
+    let maxRepeticiones = 0;
+
+    let libro;
+
+    for(const l2 of mapa.keys()) {
+
+        if(maxRepeticiones < mapa.get(l2).ejemplares) {
+
+            maxRepeticiones = mapa.get(l2).ejemplares;
+            libro = mapa.get(l2);
+
+        }
+
+    }
+
+    console.log(`Total de libros en el catálogo: ${totalLibros}`);
+    console.log(`Total de ejemplares disponibles: ${totalEjemplares}`);
+
+    if(libro != null) {
+
+        console.log(`Libro con más ejemplares: ${libro.titulo}`);
+
+    }
+    
 
 }
